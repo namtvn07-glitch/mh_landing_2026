@@ -1,0 +1,95 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+
+/* Đưa token vào Tailwind để dùng được dạng class (bg-surface, text-muted...).
+   `inline` để class tham chiếu thẳng var(--color-*) — theme dark đổi token là
+   class đổi theo, không cần biến thể dark: riêng. */
+@theme inline {
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-ink: var(--color-ink);
+  --color-text: var(--color-text);
+  --color-muted: var(--color-text-muted);
+  --color-accent: var(--color-accent);
+  --color-accent-text: var(--color-accent-text);
+  --color-on-accent: var(--color-on-accent);
+  --color-blue: var(--color-blue);
+  --color-on-blue: var(--color-on-blue);
+  --color-blue-text: var(--color-blue-text);
+  --color-tint-pink: var(--color-tint-pink);
+  --color-tint-blue: var(--color-tint-blue);
+  --color-tint-cream: var(--color-tint-cream);
+  --color-tint-mint: var(--color-tint-mint);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+  --font-hangul: var(--font-hangul);
+  --font-mixed: var(--font-mixed);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+}
+
+@layer base {
+  body {
+    background-color: var(--color-bg);
+    /* Giấy kẻ chấm kiểu sổ tay Hàn Quốc. Kích thước ô là chi tiết trang trí
+       một lần, không phải bước spacing. */
+    background-image: radial-gradient(var(--color-bg-dot) 1.5px, transparent 1.5px);
+    background-size: 20px 20px;
+    color: var(--color-text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  /* Thẻ "sticker": viền mực + bóng đổ lệch cứng. Hover nhấc lên, bấm thì ấn xuống. */
+  .sticker {
+    border: var(--border-ink) solid var(--color-ink);
+    box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-shadow-hard);
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
+  }
+
+  a.sticker:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-offset-hover) var(--shadow-offset-hover) 0 var(--color-shadow-hard);
+  }
+
+  a.sticker:active {
+    transform: translate(var(--shadow-offset), var(--shadow-offset));
+    box-shadow: 0 0 0 var(--color-shadow-hard);
+  }
+
+  .marquee__track {
+    animation: marquee var(--marquee-duration) linear infinite;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation: none;
+  }
+
+  .sticker,
+  a.sticker:hover,
+  a.sticker:active {
+    transition: none;
+    transform: none;
+  }
+}
